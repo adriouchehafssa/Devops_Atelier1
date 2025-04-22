@@ -15,8 +15,10 @@ jobs:
       mysql:
         image: mysql:8.0
         env:
-          MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: test_db
+          MYSQL_USER: root
+          MYSQL_PASSWORD: root
+          MYSQL_ROOT_PASSWORD: root
         ports:
           - 3306:3306
         options: >-
@@ -38,16 +40,23 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Check PHP version
-        run: php -v
-
-      - name: Check Composer version
-        run: composer -V
-
-      - name: Prepare environment for testing
+      - name: Wait for MySQL to be ready
         run: |
-          cp .env.ci .env
-          php spark migrate --all --quiet
+          echo "Waiting for MySQL..."
+          for i in {1..30}; do
+            if mysqladmin ping -h127.0.0.1 -uroot -proot --silent; then
+              echo "MySQL is up!"
+              break
+            fi
+            echo "Waiting..."
+            sleep 2
+          done
+
+      - name: Set correct permissions on writable directories
+        run: chmod -R 777 writable
+
+      - name: Run migrations
+        run: php spark migrate --all --quiet
 
       - name: Run PHPUnit tests with coverage
         run: vendor/bin/phpunit --coverage-text
