@@ -11,6 +11,22 @@ jobs:
     name: PHPUnit on PHP 8.2
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: test_db
+          MYSQL_USER: ci_user
+          MYSQL_PASSWORD: ci_pass
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -29,6 +45,13 @@ jobs:
 
       - name: Check Composer version
         run: composer -V
+
+      - name: Wait for MySQL to be ready
+        run: |
+          until mysqladmin ping -h 127.0.0.1 -uci_user -pci_pass --silent; do
+            echo "Waiting for MySQL..."
+            sleep 5
+          done
 
       - name: Prepare environment for testing
         run: |
