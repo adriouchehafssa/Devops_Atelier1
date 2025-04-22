@@ -1,27 +1,22 @@
-name: PHPUnit Tests
+name: Run PHPUnit Tests
 
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+on: [push, pull_request]
 
 jobs:
-  test:
+  php-tests:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Check out code
+        uses: actions/checkout@v3
 
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'  # Remplace par ta version PHP si besoin
-          extensions: mbstring, intl, bcmath, pdo, mysqli
+          php-version: '8.1' # ou '8.2' si tu préfères
 
       - name: Install Composer dependencies
-        run: composer install --no-interaction
+        run: composer install --no-interaction --prefer-dist
 
       - name: Run PHPUnit tests
-        run: ./vendor/bin/phpunit --coverage-text
+        run: vendor/bin/phpunit --coverage-text
