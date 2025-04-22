@@ -46,4 +46,4 @@ jobs:
       run: chmod -R 755 writable
 
     - name: Run PHPUnit tests
-      run: .vendor/bin/phpunit tests\models
+      run: vendor/bin/phpunit tests\models
