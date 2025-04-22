@@ -17,7 +17,7 @@ class CategoryModelTest extends CIUnitTestCase
     public function testInsertCategory()
     {
         $model = new CategoryModel();
-        $data = ['name' => 'Test Category'];
+        $data = ['name' => 'test'];
         $id = $model->insert($data);
         $this->assertGreaterThan(0, $id, "L'insertion doit retourner un ID > 0.");
     }

@@ -41,6 +41,16 @@ class Paths
 
     /**
      * ---------------------------------------------------------------
+     * SUPPORT DIRECTORY NAME
+     * ---------------------------------------------------------------
+     *
+     * This variable must contain the name of the "support" directory
+     * used by the framework for additional files.
+     */
+    public string $supportDirectory = __DIR__ . '/../../support';  // Ajouté ici
+
+    /**
+     * ---------------------------------------------------------------
      * WRITABLE DIRECTORY NAME
      * ---------------------------------------------------------------
      *
