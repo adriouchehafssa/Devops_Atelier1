@@ -45,5 +45,6 @@ jobs:
     - name: Set permissions
       run: chmod -R 755 writable
 
-    - name: Run PHPUnit tests
-      run: vendor/bin/phpunit tests/models
+    - name: Run PHPUnit tests with coverage
+      run: vendor/bin/phpunit --coverage-text tests/models
+    
