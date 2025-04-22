@@ -11,30 +11,43 @@ jobs:
     name: PHPUnit on PHP 8.2
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: test_db
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name:  Setup PHP
+      - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2.27'
           coverage: xdebug
 
-      - name:  Install Composer dependencies
+      - name: Install Composer dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name:  Check PHP version
+      - name: Check PHP version
         run: php -v
 
-      - name:  Check Composer version
+      - name: Check Composer version
         run: composer -V
 
-      - name:  Prepare environment for testing
-        run: 
+      - name: Prepare environment for testing
+        run: |
           cp .env.ci .env
           php spark migrate --all --quiet
 
-      - name:  Run PHPUnit tests with coverage
+      - name: Run PHPUnit tests with coverage
         run: vendor/bin/phpunit --coverage-text
-
