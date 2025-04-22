@@ -1,22 +1,40 @@
 name: Run PHPUnit Tests
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 
 jobs:
   php-tests:
+    name: PHPUnit on PHP 8.2
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out code
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up PHP
+      - name:  Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1' # ou '8.2' si tu préfères
+          php-version: '8.2.27'
+          coverage: xdebug
 
-      - name: Install Composer dependencies
-        run: composer install --no-interaction --prefer-dist
+      - name:  Install Composer dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Run PHPUnit tests
+      - name:  Check PHP version
+        run: php -v
+
+      - name:  Check Composer version
+        run: composer -V
+
+      - name:  Prepare environment for testing
+        run: 
+          cp .env.ci .env
+          php spark migrate --all --quiet
+
+      - name:  Run PHPUnit tests with coverage
         run: vendor/bin/phpunit --coverage-text
+
