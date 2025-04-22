@@ -16,13 +16,11 @@ jobs:
         image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: test_db
-          MYSQL_USER: ci_user
-          MYSQL_PASSWORD: ci_pass
+          MYSQL_DATABASE: tests_db
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-cmd="mysqladmin ping --silent"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
@@ -34,29 +32,16 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2.27'
+          php-version: '8.2'
           coverage: xdebug
 
       - name: Install Composer dependencies
         run: composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Check PHP version
-        run: php -v
-
-      - name: Check Composer version
-        run: composer -V
-
-      - name: Wait for MySQL to be ready
-        run: |
-          until mysqladmin ping -h 127.0.0.1 -uci_user -pci_pass --silent; do
-            echo "Waiting for MySQL..."
-            sleep 5
-          done
-
-      - name: Prepare environment for testing
+      - name: Copy CI environment and migrate
         run: |
           cp .env.ci .env
-          php spark migrate --all --quiet
+          php spark migrate --quiet
 
       - name: Run PHPUnit tests with coverage
         run: vendor/bin/phpunit --coverage-text
