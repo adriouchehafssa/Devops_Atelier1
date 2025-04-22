@@ -35,7 +35,7 @@ if (str_starts_with(PHP_SAPI, 'cgi')) {
  *---------------------------------------------------------------
  */
 
-$minPhpVersion = '8.1'; // If you update this, don't forget to update `public/index.php`.
+$minPhpVersion = '8.1';
 if (version_compare(PHP_VERSION, $minPhpVersion, '<')) {
     $message = sprintf(
         'Your PHP version must be %s or higher to run CodeIgniter. Current version: %s',
@@ -56,23 +56,23 @@ ini_set('display_errors', '1');
  *---------------------------------------------------------------
  */
 
-// Fix FCPATH to current dir (GitHub Actions compatibility)
 define('FCPATH', __DIR__ . DIRECTORY_SEPARATOR);
 
 /*
  *---------------------------------------------------------------
  * BOOTSTRAP THE APPLICATION
  *---------------------------------------------------------------
- * This process sets up the path constants, loads and registers
- * our autoloader, along with Composer's, loads our constants
- * and fires up an environment-specific bootstrapping.
  */
 
 // LOAD OUR PATHS CONFIG FILE
-// Correct path to the 'app' directory (relative to the 'spark' file)
 require __DIR__ . '/app/Config/Paths.php';
 
 $paths = new Config\Paths();
+
+// ✅ Ajouter cette ligne pour éviter l’erreur "SUPPORTPATH undefined"
+if (!defined('SUPPORTPATH')) {
+    define('SUPPORTPATH', $paths->supportDirectory . DIRECTORY_SEPARATOR);
+}
 
 // LOAD THE FRAMEWORK BOOTSTRAP FILE
 require $paths->systemDirectory . '/Boot.php';
