@@ -56,11 +56,8 @@ ini_set('display_errors', '1');
  *---------------------------------------------------------------
  */
 
-// Path to the front controller
-define('FCPATH', __DIR__ . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR);
-
-// Ensure the current directory is pointing to the front controller's directory
-chdir(FCPATH);
+// Fix FCPATH to current dir (GitHub Actions compatibility)
+define('FCPATH', __DIR__ . DIRECTORY_SEPARATOR);
 
 /*
  *---------------------------------------------------------------
