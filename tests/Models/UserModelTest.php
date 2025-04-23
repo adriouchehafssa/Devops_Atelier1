@@ -17,7 +17,7 @@ class UserModelTest extends CIUnitTestCase
     {
         $model = new UserModel();
         $data = [
-            'name'  => 'Test User',
+            'name'  => 'Test Ilham',
             'email' => 'test@example.com',
         ];
         $id = $model->insert($data);
