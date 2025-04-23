@@ -1,10 +1,14 @@
 <?php 
-namespace App\Models;
-use CodeIgniter\Model;
-class UserModel extends Model {
-protected $table = 'users';
-protected $primaryKey = 'id';
-protected $allowedFields = ['name', 'email']; 
-}
+namespace App\Controllers; 
+use App\Models\UserModel; 
+class UserController extends BaseController{
+public function index () 
+{ 
+$model = new UserModel(); 
+$data['users'] = $model->findAll(); 
+return view('user_list', $data); 
+} 
+public function create() { return view('create_user'); 
+} 
+} 
 ?>
-
