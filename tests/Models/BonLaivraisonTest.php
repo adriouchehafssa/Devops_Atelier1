@@ -16,7 +16,7 @@ class BonLaivraisonTest extends CIUnitTestCase
         $data = [
             'numero' => 'BL-2025-003',
             'date_livraison' => '2025-04-27',
-            'client_id' => 2, // ID inexistant
+            'client_id' => 90988, // ID inexistant
             'adresse_livraison' => 'Adresse fictive2'
         ];
 
