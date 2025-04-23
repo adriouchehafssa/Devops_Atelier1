@@ -1,37 +1,21 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Models;
 
-use App\Models\LigneFactureModel;
+use CodeIgniter\Model;
 
-class LigneFactureController extends BaseController
+class LigneFactureModel extends Model
 {
-    public function index()
-    {
-        $model = new LigneFactureModel();
-        $data['lignes'] = $model->findAll();
+    protected $table = 'ligne_factures'; // Adjust this if your table name is different
+    protected $primaryKey = 'id';
+    protected $allowedFields = ['facture_id', 'description', 'quantite', 'prix_unitaire'];
+    protected $useTimestamps = false;
 
-        return view('ligne_facture_list', $data);
-    }
-
-    public function create()
-    {
-        return view('create_ligne_facture');
-    }
-
-    public function store()
-    {
-        $model = new LigneFactureModel();
-
-        $data = [
-            'facture_id'  => $this->request->getPost('facture_id'),
-            'description' => $this->request->getPost('description'),
-            'quantity'    => $this->request->getPost('quantity'),
-            'price'       => $this->request->getPost('price'),
-        ];
-
-        $model->insert($data);
-
-        return redirect()->to('/lignefacture');
-    }
+    // Optional: validation rules
+    protected $validationRules = [
+        'facture_id'    => 'required|integer',
+        'description'   => 'required|string',
+        'quantite'      => 'required|integer|greater_than[0]',
+        'prix_unitaire' => 'required|integer|greater_than[0]',
+    ];
 }
