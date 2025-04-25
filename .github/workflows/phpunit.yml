@@ -23,5 +23,5 @@ jobs:
     - name: Installer les dépendances
       run: composer install
 
-    - name: xécuter PHPUnit
+    - name: Exécuter PHPUnit
       run: vendor/bin/phpunit --configuration phpunit.xml
