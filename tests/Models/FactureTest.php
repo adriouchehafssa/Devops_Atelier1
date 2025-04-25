@@ -35,7 +35,7 @@ class FactureTest extends CIUnitTestCase
         $model = new FactureModel();
 
         $data = [
-            'client' => 'Fatima',
+            'client' => 'reda',
             'Total'  => 0
         ];
 
