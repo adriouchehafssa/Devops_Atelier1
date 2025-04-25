@@ -10,10 +10,9 @@ class FactureController extends ResourceController
     protected $modelName = 'App\Models\FactureModel';
     protected $format    = 'json';
 
-    // Créer une nouvelle facture
     public function create()
     {
-        $data = $this->request->getJSON(true); // pour JSON, ou ->getPost() pour form-data
+        $data = $this->request->getJSON(true); 
 
         if (!$this->model->insert($data)) {
             return $this->failValidationErrors($this->model->errors());
@@ -25,14 +24,12 @@ class FactureController extends ResourceController
         ]);
     }
 
-    // Liste toutes les factures
     public function index()
     {
         $factures = $this->model->findAll();
         return $this->respond($factures);
     }
 
-    // Afficher une facture par ID
     public function show($id = null)
     {
         $facture = $this->model->find($id);
@@ -43,4 +40,22 @@ class FactureController extends ResourceController
 
         return $this->respond($facture);
     }
+
+   
+
+public function delete($id = null)
+{
+    $facture = $this->model->find($id);
+
+    if (!$facture) {
+        return $this->failNotFound("Facture non trouvée avec l'ID : $id");
+    }
+
+    $this->model->delete($id);
+
+    return $this->respondDeleted([
+        'message' => 'Facture supprimée avec succès.'
+    ]);
+}
+
 }

@@ -41,4 +41,19 @@ class FactureTest extends CIUnitTestCase
 
         $this->assertFalse($model->insert($data));
     }
+
+public function testDeleteFacture()
+{
+    $model = new FactureModel();
+
+    $id = $model->insert([
+        'client' => 'Ali',
+        'Total'  => 150
+    ]);
+
+    $this->assertTrue($model->delete($id));
+
+    $this->assertNull($model->find($id));
+}
+
 }
