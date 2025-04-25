@@ -33,6 +33,7 @@ class PanierModelTest extends CIUnitTestCase
     }
 
     public function testUpdatePanierCommande()
+    
     {
         $id = $this->panierModel->insert([
             'id_client'     => 2,
