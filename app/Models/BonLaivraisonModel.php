@@ -1,9 +1,6 @@
 <?php
-
 namespace App\Models;
-
 use CodeIgniter\Model;
-
 class BonLaivraisonModel extends Model
 {
     protected $table = 'bon_livraison'; 
@@ -15,8 +12,8 @@ class BonLaivraisonModel extends Model
         'adresse_livraison'
     ];
 
-    protected $useTimestamps = false; // active si tu veux gérer automatiquement created_at/updated_at
-    protected $returnType = 'array'; // ou 'object' selon ta préférence
+    protected $useTimestamps = false; 
+    protected $returnType = 'array'; 
 
     // Règles de validation
     protected $validationRules = [
@@ -31,8 +28,7 @@ class BonLaivraisonModel extends Model
             'is_not_unique' => 'Le client spécifié n\'existe pas.'
         ]
     ];
-
-    protected $skipValidation = false; // doit être false pour que la validation soit active
+    protected $skipValidation = false; 
 }
 
 
