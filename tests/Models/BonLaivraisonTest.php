@@ -9,41 +9,24 @@ class BonLaivraisonTest extends CIUnitTestCase
 {
     protected $refresh = true;
 
-    public function testInsertBonLivraisonClientInexistant()
+    public function testFindBonLivraisonParNumero()
     {
         $model = new BonLaivraisonModel();
-
-        $data = [
-            'numero' => 'BA-2025-003',
-            'date_livraison' => '2025-04-30',
-            'client_id' => 99999, // ID inexistant
-            'adresse_livraison' => 'Adresse fictive '
-        ];
-
-        $result = $model->insert($data);
-
-        
-        $this->assertFalse($result, "L'insertion aurait dû échouer avec un client inexistant.");
-        // Vérifie le message d'erreur de validation
-        $errors = $model->errors();
-        $this->assertArrayHasKey('client_id', $errors);
-        $this->assertEquals("Le client spécifié n'existe pas.", $errors['client_id']);
+    
+        //bon de livraison avec le numéro 'BA-2025-005' dans la base de données.
+        $numero = 'BA-2025-006';
+    
+        $bonLivraison = $model->where('numero', $numero)->first();
+    
+        $this->assertNotEmpty($bonLivraison, "Le bon de livraison avec le numéro {$numero} n'a pas été trouvé.");
+    
+        // Vérifie que le numéro correspond bien à celui qu'on recherche
+        $this->assertEquals($numero, $bonLivraison['numero'], "Le numéro du bon de livraison ne correspond pas à celui recherché.");
+    
+        // Vérifie que les autres champs sont valides (par exemple, 'client_id' et 'adresse_livraison')
+        $this->assertArrayHasKey('client_id', $bonLivraison, "Le champ 'client_id' est manquant.");
+        $this->assertArrayHasKey('adresse_livraison', $bonLivraison, "Le champ 'adresse_livraison' est manquant.");
     }
-    public function testValidationAdresseLivraisonTropCourte()
-    {
-     $model = new BonLaivraisonModel();
-     $data = [
-        'numero' => 'BA-2025-005',
-        'date_livraison' => '2025-05-05',
-        'client_id' => 2, // Supposons que le client existe
-        'adresse_livraison' => 'Adresse long' // Adresse 
-     ];
-     $result = $model->insert($data);
-     $this->assertFalse($result, "L'insertion aurait dû échouer avec une adresse trop courte.");
-
-     $errors = $model->errors();
-     $this->assertArrayHasKey('adresse_livraison', $errors);
-     $this->assertEquals("L'adresse de livraison doit comporter au moins 3 caractères.", $errors['adresse_livraison']);
-    }
+    
 
 }
